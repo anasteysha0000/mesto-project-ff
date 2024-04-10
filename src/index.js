@@ -1,14 +1,15 @@
-// @todo: Темплейт карточки
+import './styles/index.css';
+import { initialCards } from './scripts/cards.js';
 const placesElement = document.querySelector('.places__list');
 
-const cardDeleteButton = (cardElement)=>{
+const deleteCardButton = (cardElement)=>{
     return cardElement.remove();
   }
 
 function getTemp(element){
     return [element.name, element.link, element.name];
 }
-function getCard(initialCard, cardDeleteButton) {
+function getCard(initialCard, deleteCardButton) {
     const card = document.querySelector('#card-template').content;
 
     const cardElement = card.querySelector('.places__item').cloneNode(true);
@@ -19,14 +20,14 @@ function getCard(initialCard, cardDeleteButton) {
 
     const buttonDelete = cardElement.querySelector('.card__delete-button');
     buttonDelete.addEventListener('click', ()=> {
-        cardDeleteButton(cardElement);
+        deleteCardButton(cardElement);
         })
 
     return cardElement
   }
 
 initialCards.forEach((element) =>{
-    placesElement.append(getCard(element, cardDeleteButton))
+    placesElement.append(getCard(element, deleteCardButton))
   });
 
 // @todo: DOM узлы
