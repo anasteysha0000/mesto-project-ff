@@ -20,30 +20,23 @@ function handleCardSubmit(evt) {
   };
   placesElement.prepend(getCard(card, deleteCardButton, toggleLikeButton, openImage))
   closePopup(popupTypeNewCard);
-  formElement.reset()
+  formElementTypeNewCard.reset();
 }
 function handleFormSubmit(evt) {
   evt.preventDefault();
   const name = nameInput.value;
   const job = jobInput.value;
-  
   profileName.textContent = name;
   profileDescription.textContent = job;
   closePopup(popupTypeEdit);
 }
-function formEdit(popup) {
+function formEdit() {
   const profileName = document.querySelector(".profile__title").textContent;
   const profileDescription = document.querySelector(
     ".profile__description"
   ).textContent;
   nameInput.value = profileName;
   jobInput.value = profileDescription;
-  popup.addEventListener("click", (event)=> {
-      if (event.target === popup || event.key === "Escape") {
-          nameInput.value = profileName;
-          jobInput.value = profileDescription;
-      }
-});
 }
 function popupCloseHandler(popup) {
   popup.addEventListener("click", (event) => {
@@ -55,7 +48,6 @@ function popupCloseHandler(popup) {
     closePopup(popup);
   });
 }
-
 initialCards.forEach((element) => {
   placesElement.append(
     getCard(element, deleteCardButton, toggleLikeButton, openImage)
@@ -68,7 +60,7 @@ popups.forEach((element) => {
 
 formElement.addEventListener("submit", handleFormSubmit);
 formElementTypeNewCard.addEventListener("submit", handleCardSubmit);
-popupOpenEditButton.addEventListener("click", formEdit(popupOpenEditButton));
+popupOpenEditButton.addEventListener("click", formEdit);
 popupOpenEditButton.addEventListener("click", function () {
   openPopup(popupTypeEdit);
 });
