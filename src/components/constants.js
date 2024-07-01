@@ -6,6 +6,7 @@ const popupAddButton = document.querySelector(".profile__add-button");
 const popupTypeImage = document.querySelector(".popup_type_image");
 const popups = [popupTypeEdit, popupTypeNewCard, popupTypeImage];
 const formElement = document.querySelector(".popup__form");
+const formInput = document.querySelector(".popup__input")
 const nameInput = formElement.querySelector(".popup__input_type_name");
 const jobInput = formElement.querySelector(".popup__input_type_description");
 const formElementTypeNewCard = popupTypeNewCard.querySelector(".popup__form");
@@ -14,4 +15,4 @@ const cardLink = formElementTypeNewCard.querySelector(".popup__input_type_url");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
  export{placesElement,popupTypeEdit,popupTypeNewCard,popupOpenEditButton,popupAddButton,popupTypeImage,popups,formElement,nameInput,jobInput,
-formElementTypeNewCard,cardName,cardLink,profileName,profileDescription}
+formElementTypeNewCard,cardName,cardLink,profileName,profileDescription,formInput}

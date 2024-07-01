@@ -1,4 +1,5 @@
 export { openPopup, closePopup, makePopupAnimated };
+import { clearValidation } from "./validation";
 
 function openPopup(popup){
   popup.classList.add("popup_is-opened");
@@ -15,5 +16,6 @@ function closeOnEsc(event) {
   const openedPopup = document.querySelector(".popup_is-opened");
   if (event.key === 'Escape') {
       closePopup(openedPopup);
+      clearValidation(openedPopup)
   }
 }
