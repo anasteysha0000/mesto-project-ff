@@ -14,5 +14,6 @@ const cardName = formElementTypeNewCard.querySelector(".popup__input_type_card-n
 const cardLink = formElementTypeNewCard.querySelector(".popup__input_type_url");
 const profileName = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
+
  export{placesElement,popupTypeEdit,popupTypeNewCard,popupOpenEditButton,popupAddButton,popupTypeImage,popups,formElement,nameInput,jobInput,
 formElementTypeNewCard,cardName,cardLink,profileName,profileDescription,formInput}

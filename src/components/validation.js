@@ -1,41 +1,45 @@
-
-  const showInputError = (formElement, inputElement, errorMessage) => {
+import { validationSettings } from "./constants";
+  const showInputError = (formElement, inputElement, errorMessage, validationSettings) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add('popup__input_type_error');
+    inputElement.classList.add(validationSettings.inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add('popup__input_type_error-active');
+    errorElement.classList.add(validationSettings.errorClass);
   };
-  
-  const hideInputError = (formElement, inputElement) => {
+ 
+  const hideInputError = (formElement, inputElement,validationSettings) => {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.remove('popup__input_type_error');
+    inputElement.classList.remove(validationSettings.inputErrorClass);
     errorElement.textContent = "";
-    errorElement.classList.remove('popup__input_type_error-active');
+    errorElement.classList.remove(validationSettings.errorClass);
   };
-  
-  const setEventListeners = (formElement) => {
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-    const buttonElement = formElement.querySelector('.popup__button');
-      toggleButtonState(inputList, buttonElement);
+
+  const setEventListeners = (formElement,validationSettings) => {
+    const inputList = Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
+    const buttonElement = formElement.querySelector(validationSettings.submitButtonSelector);
+      toggleButtonState(inputList, buttonElement,validationSettings);
       inputList.forEach((inputElement) => {
         inputElement.addEventListener('input', () => {
-          isValid(formElement, inputElement)})
+          isValid(formElement, inputElement, validationSettings)
+          toggleButtonState(inputList, buttonElement,validationSettings);})
         });
     }
 
-  const enableValidation = () => {
-    const formList = Array.from(document.querySelectorAll('.popup__form'));
+ 
+
+  const enableValidation = (validationSettings) => {
+    const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));
     formList.forEach((formElement) => {
-      setEventListeners(formElement);
+      setEventListeners(formElement,validationSettings);
     });
   };
-  function clearValidation(formElement){
-    const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
+ 
+  function clearValidation(formElement,validationSettings){
+    const inputList = Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
     inputList.forEach((inputElement) => {
       const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
       errorElement.textContent = "";
-      inputElement.classList.remove('popup__input_type_error');
-      inputElement.classList.remove('popup__input_type_error-active');
+      inputElement.classList.remove(validationSettings.inputErrorClass);
+      inputElement.classList.remove(validationSettings.errorClass);
   });
   }
   
@@ -45,29 +49,31 @@
       
     });
   };
-  const toggleButtonState = (inputList, buttonElement) => {
+
+  const toggleButtonState = (inputList, buttonElement,validationSettings) => {
     // Если есть хотя бы один невалидный инпут
 
     if (hasInvalidInput(inputList)) {
      
       // сделай кнопку неактивной
       buttonElement.disabled = true;
-      buttonElement.classList.add('form__submit_inactive');
+      buttonElement.classList.add(validationSettings.inactiveButtonClass);
     } else {
       buttonElement.disabled = false;
-      buttonElement.classList.remove('form__submit_inactive');
+      buttonElement.classList.remove(validationSettings.inactiveButtonClass);
     }
   }; 
-  const isValid = (formElement, inputElement) => {
+
+  const isValid = (formElement, inputElement, validationSettings) => {
     if (inputElement.validity.patternMismatch) {
       inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
     inputElement.setCustomValidity("");
   }
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage,validationSettings);
   } else {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement,validationSettings);
   }
 }; 
   export{enableValidation,clearValidation}
