@@ -1,4 +1,11 @@
-import { config } from "./constants";
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/pwff-cohort-1",
+  headers: {
+    authorization: "77907589-9e72-4481-9b6a-63164258805a",
+    "Content-Type": "application/json",
+  }
+}
+
 function userInfo() {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: {

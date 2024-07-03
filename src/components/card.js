@@ -50,7 +50,7 @@ function getCard(
 
   const buttonLike = cardElement.querySelector(".card__like-button");
   buttonLike.addEventListener("click", (evt) => {
-    toggleLikeButton(evt, cardElement);
+    toggleLikeButton(evt, initialCard);
   });
 
   cardElement.querySelector(".likes-counter").textContent =
@@ -68,7 +68,6 @@ function toggleLikeButton(evt, cardElement) {
   const action = isLiked
     ? unlikeCard(cardElement._id)
     : likeCard(cardElement._id);
-
   action
     .then((res) => {
       evt.target.classList.toggle("card__like-button_is-active", !isLiked);

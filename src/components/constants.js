@@ -37,13 +37,6 @@ const validationSettings = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__input_type_error-active",
 };
-const config = {
-  baseUrl: "https://nomoreparties.co/v1/pwff-cohort-1",
-  headers: {
-    authorization: "77907589-9e72-4481-9b6a-63164258805a",
-    "Content-Type": "application/json",
-  },
-};
 export {
   placesElement,
   popupTypeEdit,
@@ -67,5 +60,4 @@ export {
   deletePopup,
   popupForm,
   validationSettings,
-  config
 };
