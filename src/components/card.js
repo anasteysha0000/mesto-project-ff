@@ -1,17 +1,25 @@
-export { toggleLikeButton, deleteCardButton, getCard};
-import { deleteCard, likeCard,unlikeCard} from "./api.js";
+export { toggleLikeButton, deleteCardButton, getCard };
+import { deleteCard, likeCard, unlikeCard, counterLike } from "./api.js";
+import { openPopup, closePopup } from "./modal.js";
+import { deletePopup, popupForm } from "./constants.js";
 function deleteCardButton(evt, cardElement) {
-  const cardDelete = evt.target.closest('.card');
+  const cardDelete = evt.target.closest(".card");
   deleteCard(cardElement._id)
     .then(() => {
       cardDelete.remove();
     })
     .catch((error) => {
-      console.log(`Ошибка при удалении карточки: ${error}`);
+      console.log(`Ошибка при удалении карточки: ${error.status}`);
     });
 }
 
-function getCard(initialCard, deleteCardButton, toggleLikeButton, openImage, counter, owner) {
+function getCard(
+  initialCard,
+  deleteCardButton,
+  toggleLikeButton,
+  openImage,
+  owner
+) {
   const card = document.querySelector("#card-template").content;
   const cardElement = card.querySelector(".places__item").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -21,25 +29,32 @@ function getCard(initialCard, deleteCardButton, toggleLikeButton, openImage, cou
   cardElement.querySelector(".card__title").textContent = initialCard.name;
 
   const buttonDelete = cardElement.querySelector(".card__delete-button");
+
   if (initialCard.owner._id !== owner) {
     buttonDelete.remove();
   } else {
-    buttonDelete.addEventListener("click", (evt) => {
-      deleteCardButton(evt, initialCard);
+    buttonDelete.addEventListener("click", (event) => {
+      event.preventDefault();
+      openPopup(deletePopup);
+
+      const confirmDeleteHandler = (submitEvent) => {
+        submitEvent.preventDefault();
+        deleteCardButton(event, initialCard); // Передаем оригинальный event
+        closePopup(deletePopup);
+        popupForm.removeEventListener("submit", confirmDeleteHandler); // Удаляем обработчик после выполнения
+      };
+
+      popupForm.addEventListener("submit", confirmDeleteHandler);
     });
   }
 
   const buttonLike = cardElement.querySelector(".card__like-button");
-
-  if (initialCard.likes.some(like => like._id === owner)) {
-    buttonLike.classList.add("card__like-button_is-active");
-  }
-
   buttonLike.addEventListener("click", (evt) => {
-    toggleLikeButton(evt, initialCard._id);
+    toggleLikeButton(evt, cardElement);
   });
 
-  cardElement.querySelector(".likes-counter").textContent = initialCard.likes.length;
+  cardElement.querySelector(".likes-counter").textContent =
+    initialCard.likes.length;
 
   cardImage.addEventListener("click", () => {
     openImage(initialCard.link, initialCard.name, initialCard.name);
@@ -48,15 +63,20 @@ function getCard(initialCard, deleteCardButton, toggleLikeButton, openImage, cou
   return cardElement;
 }
 
-function toggleLikeButton(evt, cardId) {
+function toggleLikeButton(evt, cardElement) {
   const isLiked = evt.target.classList.contains("card__like-button_is-active");
-  const action = isLiked ? unlikeCard(cardId) : likeCard(cardId);
+  const action = isLiked
+    ? unlikeCard(cardElement._id)
+    : likeCard(cardElement._id);
+
   action
     .then((res) => {
       evt.target.classList.toggle("card__like-button_is-active", !isLiked);
-      evt.target.closest('.places__item').querySelector(".likes-counter").textContent = res.likes.length;
+      evt.target
+        .closest(".places__item")
+        .querySelector(".likes-counter").textContent = res.likes.length;
     })
     .catch((error) => {
-      console.log(`Ошибка при лайке или анлайке карточки: ${error}`);
+      console.log(`Ошибка при лайке или анлайке карточки: ${error.status}`);
     });
 }
