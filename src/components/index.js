@@ -75,7 +75,7 @@ function submitAvatarForm(evt) {
   evt.submitter.textContent = "Сохранение...";
   editAvatar(inputUrl.value)
     .then((url) => {
-      profileAvatar.style.backgroundImage = `url(${url})`;
+      profileAvatar.style.backgroundImage = `url(${url.avatar})`;
       closePopup(popupTypeAvatar);
       clearValidation(formElementTypeAvatar, validationSettings);
     })
