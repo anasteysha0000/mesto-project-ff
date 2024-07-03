@@ -9,42 +9,107 @@ function userInfo(){
     return fetch(`${config.baseUrl}/users/me`, {
         headers: {
             authorization: '77907589-9e72-4481-9b6a-63164258805a'}})
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
     
 }
 function cardsInfo(){
     return fetch(`${config.baseUrl}/cards`, {
         headers: {
             authorization: '77907589-9e72-4481-9b6a-63164258805a'}})
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
 
 }
-function editProfile(nameChange,aboutChange){
+function editProfile(nameChange,jobChange){
     return fetch(`${config.baseUrl}/users/me`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
             name: nameChange,
-            about: aboutChange,
+            about: jobChange,
           })
       })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
 }
-function newCard(name,link){
+function newCard(card){
     return fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: config.headers,
         body: JSON.stringify({
-            name: name,
-            link: link,
+            name: card.name,
+            link: card.link,
           })
       })
-    .then(res => res.json())
+      .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
 }
 function deleteCard(cardId){
     return fetch(`${config.baseUrl}/cards/${cardId}`, {
         method: 'DELETE',
         headers: config.headers})
-    .then(res => res.json())
+        .then(res => {
+            if (!res.ok) {
+              return Promise.reject(`Ошибка: ${res.status}`);
+            }
+            return res.json();
+          });
 }
-export{userInfo,cardsInfo,editProfile,newCard,deleteCard}
+function likeCard(cardId){
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: {
+            authorization: '77907589-9e72-4481-9b6a-63164258805a'}})
+    .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
+    }
+function unlikeCard(cardId){
+    return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: '77907589-9e72-4481-9b6a-63164258805a'}})
+    .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
+    }
+function editAvatar(avatarUrl){
+    return fetch(`${config.baseUrl}/users/me/avatar`, {
+        method: 'PATCH',
+        headers: config.headers,
+        body: JSON.stringify({
+            avatar: avatarUrl,
+          })
+      })
+    .then(res => {
+        if (!res.ok) {
+          return Promise.reject(`Ошибка: ${res.status}`);
+        }
+        return res.json();
+      });
+    }
+
+export{userInfo,cardsInfo,editProfile,newCard,deleteCard,likeCard,unlikeCard,editAvatar}
