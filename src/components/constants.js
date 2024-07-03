@@ -5,17 +5,17 @@ const popupOpenEditButton = document.querySelector(".profile__edit-button");
 const popupAddButton = document.querySelector(".profile__add-button");
 const popupTypeImage = document.querySelector(".popup_type_image");
 const popupTypeAvatar = document.querySelector(".popup_type_avatar");
-const deletePopup = document.querySelector(".popup_type_delete");
+const popupConfirmation = document.querySelector(".popup_type_delete");
 const popups = [
   popupTypeEdit,
   popupTypeNewCard,
   popupTypeImage,
   popupTypeAvatar,
-  deletePopup,
+  popupConfirmation,
 ];
-const formElement = popupTypeEdit.querySelector(".popup__form");
-const nameInput = formElement.querySelector(".popup__input_type_name");
-const jobInput = formElement.querySelector(".popup__input_type_description");
+const formEditProfile = popupTypeEdit.querySelector(".popup__form");
+const nameInput = formEditProfile.querySelector(".popup__input_type_name");
+const jobInput = formEditProfile.querySelector(".popup__input_type_description");
 const formElementTypeNewCard = popupTypeNewCard.querySelector(".popup__form");
 const cardName = formElementTypeNewCard.querySelector(
   ".popup__input_type_card-name"
@@ -28,7 +28,7 @@ const formElementTypeAvatar = popupTypeAvatar.querySelector(".popup__form");
 const inputUrl = formElementTypeAvatar.querySelector(
   ".popup__input_type_url_img"
 );
-const popupForm = deletePopup.querySelector(".popup__form");
+const formConfirmation = popupConfirmation.querySelector(".popup__form");
 const validationSettings = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
@@ -37,6 +37,10 @@ const validationSettings = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__input_type_error-active",
 };
+const cardTemplate = document.querySelector("#card-template");
+const popupTypeImageDescription = popupTypeImage.querySelector(".popup__image");
+const popupTypeImageTitle = popupTypeImage.querySelector(".popup__caption");
+
 export {
   placesElement,
   popupTypeEdit,
@@ -46,7 +50,7 @@ export {
   popupTypeImage,
   popupTypeAvatar,
   popups,
-  formElement,
+  formEditProfile,
   nameInput,
   jobInput,
   formElementTypeNewCard,
@@ -57,7 +61,11 @@ export {
   profileAvatar,
   formElementTypeAvatar,
   inputUrl,
-  deletePopup,
-  popupForm,
+  popupConfirmation,
+  formConfirmation,
   validationSettings,
+  cardTemplate,
+  popupTypeImageDescription,
+  popupTypeImageTitle,
+  
 };

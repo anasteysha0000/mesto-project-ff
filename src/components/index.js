@@ -12,7 +12,7 @@ import {
   popupTypeImage,
   popupTypeAvatar,
   popups,
-  formElement,
+  formEditProfile,
   nameInput,
   jobInput,
   formElementTypeNewCard,
@@ -24,19 +24,21 @@ import {
   formElementTypeAvatar,
   inputUrl,
   validationSettings,
+  popupTypeImageDescription,
+  popupTypeImageTitle,
 } from "./constants.js";
 import {
-  cardsInfo,
-  userInfo,
+  getInitialCards,
+  getIUserInfo,
   editProfile,
-  newCard,
+  createNewCard,
   editAvatar,
 } from "./api.js";
 
 function openImage(cardLink, cardName, cardTitle) {
-  popupTypeImage.querySelector(".popup__image").src = cardLink;
-  popupTypeImage.querySelector(".popup__image").alt = cardName;
-  popupTypeImage.querySelector(".popup__caption").textContent = cardTitle;
+  popupTypeImageDescription.src = cardLink;
+  popupTypeImageDescription.alt = cardName;
+  popupTypeImageTitle.textContent = cardTitle;
   openPopup(popupTypeImage);
 }
 
@@ -47,7 +49,7 @@ function handleCardSubmit(evt) {
     name: cardName.value,
     link: cardLink.value,
   };
-  newCard(card)
+  createNewCard(card)
     .then((card) => {
       placesElement.prepend(
         getCard(
@@ -66,9 +68,8 @@ function handleCardSubmit(evt) {
     .finally(() => {
       evt.submitter.textContent = "Сохранить";
     });
-  formElementTypeNewCard.reset();
 }
-function handleProfileSubmit(evt) {
+function submitAvatarForm(evt) {
   evt.preventDefault();
   evt.submitter.textContent = "Сохранение...";
   editAvatar(inputUrl.value)
@@ -82,11 +83,9 @@ function handleProfileSubmit(evt) {
     .finally(() => {
       evt.submitter.textContent = "Сохранить";
     });
-
-  formElementTypeAvatar.reset();
 }
 
-function handleFormSubmit(evt) {
+function submitEditProfileForm(evt) {
   evt.preventDefault();
   evt.submitter.textContent = "Сохранение...";
   editProfile(nameInput.value, jobInput.value)
@@ -101,10 +100,8 @@ function handleFormSubmit(evt) {
     .finally(() => (evt.submitter.textContent = "Сохранение"));
 }
 function formEdit() {
-  const profileName = document.querySelector(".profile__title").textContent;
-  const profileDescription = document.querySelector(
-    ".profile__description"
-  ).textContent;
+  const profileName = document.querySelector(".profile__title").textContent; 
+  const profileDescription = document.querySelector(".profile__description").textContent; 
   nameInput.value = profileName;
   jobInput.value = profileDescription;
 }
@@ -112,16 +109,15 @@ function popupCloseHandler(popup) {
   popup.addEventListener("click", (event) => {
     if (event.target === popup) {
       closePopup(popup);
-      clearValidation(popup, validationSettings);
     }
   });
   popup.querySelector(".popup__close").addEventListener("click", () => {
     closePopup(popup);
-    clearValidation(popup, validationSettings);
   });
 }
 
-Promise.all([userInfo(), cardsInfo()]).then(([name, card]) => {
+Promise.all([getIUserInfo(), getInitialCards()])
+.then(([name, card]) => {
   const owner = name._id;
   profileName.textContent = name.name;
   profileDescription.textContent = name.about;
@@ -136,26 +132,33 @@ Promise.all([userInfo(), cardsInfo()]).then(([name, card]) => {
     );
     placesElement.append(cardAdd);
   });
-});
+})
+.catch((error)=>{
+  console.log(`Ошибка: ${error}`);
+})
+
 
 popups.forEach((element) => {
   popupCloseHandler(element);
   makePopupAnimated(element);
 });
 
-formElement.addEventListener("submit", handleFormSubmit);
+formEditProfile.addEventListener("submit", submitEditProfileForm);
 formElementTypeNewCard.addEventListener("submit", handleCardSubmit);
-popupOpenEditButton.addEventListener("click", formEdit);
 popupOpenEditButton.addEventListener("click", function () {
+  clearValidation(formEditProfile, validationSettings);
+  formEdit();
   openPopup(popupTypeEdit);
+  
 });
 popupAddButton.addEventListener("click", function () {
+  clearValidation(formElementTypeNewCard, validationSettings);
   openPopup(popupTypeNewCard);
 });
 profileAvatar.addEventListener("click", function () {
-  openPopup(popupTypeAvatar);
   clearValidation(formElementTypeAvatar, validationSettings);
+  openPopup(popupTypeAvatar);
 });
-formElementTypeAvatar.addEventListener("submit", handleProfileSubmit);
+formElementTypeAvatar.addEventListener("submit", submitAvatarForm);
 
 enableValidation(validationSettings);

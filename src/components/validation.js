@@ -1,33 +1,33 @@
 const showInputError = (
-  formElement,
+  formEditProfile,
   inputElement,
   errorMessage,
   validationSettings
 ) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+  const errorElement = formEditProfile.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(validationSettings.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(validationSettings.errorClass);
 };
 
-const hideInputError = (formElement, inputElement, validationSettings) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+const hideInputError = (formEditProfile, inputElement, validationSettings) => {
+  const errorElement = formEditProfile.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(validationSettings.inputErrorClass);
   errorElement.textContent = "";
   errorElement.classList.remove(validationSettings.errorClass);
 };
 
-const setEventListeners = (formElement, validationSettings) => {
+const setEventListeners = (formEditProfile, validationSettings) => {
   const inputList = Array.from(
-    formElement.querySelectorAll(validationSettings.inputSelector)
+    formEditProfile.querySelectorAll(validationSettings.inputSelector)
   );
-  const buttonElement = formElement.querySelector(
+  const buttonElement = formEditProfile.querySelector(
     validationSettings.submitButtonSelector
   );
   toggleButtonState(inputList, buttonElement, validationSettings);
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", () => {
-      isValid(formElement, inputElement, validationSettings);
+      isValid(formEditProfile, inputElement, validationSettings);
       toggleButtonState(inputList, buttonElement, validationSettings);
     });
   });
@@ -37,21 +37,22 @@ const enableValidation = (validationSettings) => {
   const formList = Array.from(
     document.querySelectorAll(validationSettings.formSelector)
   );
-  formList.forEach((formElement) => {
-    setEventListeners(formElement, validationSettings);
+  formList.forEach((formEditProfile) => {
+    setEventListeners(formEditProfile, validationSettings);
   });
 };
 
-function clearValidation(formElement, validationSettings) {
+function clearValidation(formEditProfile, validationSettings) {
   const inputList = Array.from(
-    formElement.querySelectorAll(validationSettings.inputSelector)
+    formEditProfile.querySelectorAll(validationSettings.inputSelector)
   );
   inputList.forEach((inputElement) => {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
+    const errorElement = formEditProfile.querySelector(`.${inputElement.id}-error`);
     errorElement.textContent = "";
     inputElement.classList.remove(validationSettings.inputErrorClass);
     inputElement.classList.remove(validationSettings.errorClass);
   });
+  formEditProfile.reset();
 }
 
 const hasInvalidInput = (inputList) => {
@@ -70,7 +71,7 @@ const toggleButtonState = (inputList, buttonElement, validationSettings) => {
   }
 };
 
-const isValid = (formElement, inputElement, validationSettings) => {
+const isValid = (formEditProfile, inputElement, validationSettings) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
   } else {
@@ -78,13 +79,13 @@ const isValid = (formElement, inputElement, validationSettings) => {
   }
   if (!inputElement.validity.valid) {
     showInputError(
-      formElement,
+      formEditProfile,
       inputElement,
       inputElement.validationMessage,
       validationSettings
     );
   } else {
-    hideInputError(formElement, inputElement, validationSettings);
+    hideInputError(formEditProfile, inputElement, validationSettings);
   }
 };
 export { enableValidation, clearValidation };

@@ -1,7 +1,7 @@
 export { toggleLikeButton, deleteCardButton, getCard };
 import { deleteCard, likeCard, unlikeCard, counterLike } from "./api.js";
 import { openPopup, closePopup } from "./modal.js";
-import { deletePopup, formElement, popupForm } from "./constants.js";
+import { popupConfirmation, formEditProfile, formConfirmation, cardTemplate } from "./constants.js";
 function deleteCardButton(evt, cardElement) {
   const cardDelete = evt.target.closest(".card");
   deleteCard(cardElement._id)
@@ -20,7 +20,7 @@ function getCard(
   openImage,
   owner
 ) {
-  const card = document.querySelector("#card-template").content;
+  const card = cardTemplate.content;
   const cardElement = card.querySelector(".places__item").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
 
@@ -35,16 +35,16 @@ function getCard(
   } else {
     buttonDelete.addEventListener("click", (event) => {
       event.preventDefault();
-      openPopup(deletePopup);
+      openPopup(popupConfirmation);
 
       const confirmDeleteHandler = (submitEvent) => {
         submitEvent.preventDefault();
         deleteCardButton(event, initialCard); // Передаем оригинальный event
-        closePopup(deletePopup);
-        popupForm.removeEventListener("submit", confirmDeleteHandler); // Удаляем обработчик после выполнения
+        closePopup(popupConfirmation);
+        formConfirmation.removeEventListener("submit", confirmDeleteHandler); // Удаляем обработчик после выполнения
       };
 
-      popupForm.addEventListener("submit", confirmDeleteHandler);
+      formConfirmation.addEventListener("submit", confirmDeleteHandler);
     });
   }
 
