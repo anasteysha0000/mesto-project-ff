@@ -61,6 +61,7 @@ function handleCardSubmit(evt) {
         )
       );
       closePopup(popupTypeNewCard);
+      clearValidation(formElementTypeNewCard, validationSettings);
     })
     .catch((error) => {
       console.log(`Ошибка при заполнении новой карточки: ${error}`);
@@ -76,6 +77,7 @@ function submitAvatarForm(evt) {
     .then((url) => {
       profileAvatar.style.backgroundImage = `url(${url})`;
       closePopup(popupTypeAvatar);
+      clearValidation(formElementTypeAvatar, validationSettings);
     })
     .catch((error) => {
       console.log(`Ошибка при изменении аватара: ${error}`);
@@ -146,17 +148,14 @@ popups.forEach((element) => {
 formEditProfile.addEventListener("submit", submitEditProfileForm);
 formElementTypeNewCard.addEventListener("submit", handleCardSubmit);
 popupOpenEditButton.addEventListener("click", function () {
-  clearValidation(formEditProfile, validationSettings);
   formEdit();
   openPopup(popupTypeEdit);
   
 });
 popupAddButton.addEventListener("click", function () {
-  clearValidation(formElementTypeNewCard, validationSettings);
   openPopup(popupTypeNewCard);
 });
 profileAvatar.addEventListener("click", function () {
-  clearValidation(formElementTypeAvatar, validationSettings);
   openPopup(popupTypeAvatar);
 });
 formElementTypeAvatar.addEventListener("submit", submitAvatarForm);
