@@ -1,7 +1,7 @@
 export { toggleLikeButton, deleteCardButton, getCard };
 import { deleteCard, likeCard, unlikeCard, counterLike } from "./api.js";
 import { openPopup, closePopup } from "./modal.js";
-import { deletePopup, popupForm } from "./constants.js";
+import { deletePopup, formElement, popupForm } from "./constants.js";
 function deleteCardButton(evt, cardElement) {
   const cardDelete = evt.target.closest(".card");
   deleteCard(cardElement._id)
@@ -52,7 +52,10 @@ function getCard(
   buttonLike.addEventListener("click", (evt) => {
     toggleLikeButton(evt, initialCard);
   });
-
+  initialCard.likes.some((like) => like._id === owner)
+  ? buttonLike.classList.add("card__like-button_is-active")
+  : buttonLike.classList.remove("card__like-button_is-active");
+  
   cardElement.querySelector(".likes-counter").textContent =
     initialCard.likes.length;
 
